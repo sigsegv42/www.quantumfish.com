@@ -7,7 +7,7 @@ require "stringex"
 ssh_user       = "sigsegv@quantumfish.com"
 ssh_port       = "22"
 document_root  = "/www/quantumfish.com/octopress/"
-deploy_default = "rsync"
+deploy_default = "scp"
 
 # This will be configured for you when you run config_deploy
 deploy_branch  = "gh-pages"
@@ -222,6 +222,12 @@ desc "Deploy website via rsync"
 task :rsync do
   puts "## Deploying website via Rsync"
   ok_failed system("rsync -avze 'ssh -p #{ssh_port}' --delete #{public_dir}/ #{ssh_user}:#{document_root}")
+end
+
+desc "Deploy website via scp"
+task :scp do
+  puts "## Deploying website via scp"
+  ok_failed system("scp -r -P #{ssh_port} #{public_dir}/* #{ssh_user}:#{document_root}")
 end
 
 desc "deploy public directory to github pages"
