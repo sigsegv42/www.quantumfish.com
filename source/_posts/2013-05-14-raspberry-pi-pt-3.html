@@ -1,0 +1,35 @@
+--- 
+layout: post
+title: Raspberry Pi Fermentation Controller - Part 3
+tags: 
+- Brewing
+status: publish
+type: post
+published: false
+meta: 
+  _edit_last: "1"
+---
+
+<p>
+	<a href="/blog/2013/04/20/raspberry-pi-pt-1/">Part 1</a> and <a href="/blog/2013/04/24/raspberry-pi-pt-2/">part 2</a> covered getting the Raspberry Pi configured with a basic software stack.  With that out of the way, we can focus on wiring up the remaining hardware components.  There will be two types of IO devices wired to the Pi - temperature sensors and SSR's.  
+</p>
+
+<p>
+	The number of temperature sensors you will need depends on how many fermenters can be monitored at once.  It's also a good idea to have a sensor monitoring the ambient temperature outside of the fermenters.  If you are using a fridge or freezer as a fermentation chamber you may want a sensor inside and outside also.  Since I'm not using a chamber yet, I'm only using a single ambient sensor plus the two for the fermenters.
+</p>
+
+<p>
+	Each monitored fermenter will have a heater wrapped around it.  These heaters are sold pre-assembled by MoreBeer under the brand name <a href="http://morebeer.com/products/fermwraptm-heater.html?site_id=5">FermWrap</a>.  Each heater has a two prong 110VAC cord and when plugged in draws 40 watts.  These are the same as the <a href="http://www.reptilebasics.com/heat-tape">heat tape</a> used for heating reptile tanks.  If you need more than one or two heaters, it may be more economical to purchase the individual components and assemble as many as you need yourself.
+</p>
+
+<p>
+	The Pi's GPIO headers can only be used for low power, low current DC devices.  This means that the heaters cannot be directly connected.  Instead, Solid State Relays (SSR's) are used.  Each SSR has a pair of control input terminals and a pair of output terminals.  The input terminals are connected to a ground pin and GPIO pin of the Pi.  The output terminals are wired into the hot line between a 110VAC power cord and outlet.  When the Pi sends a control voltage signal to the SSR, it closes the relay and allows power to flow through the output side to power the outlet where the heater is plugged in.
+</p>
+
+<p>
+	SSR's are typically rated based on the current that they can handle.  Our heaters draw 40 watts at 110VAC and since Watts = Amps x Volts, we can calculate that the SSR's need to be able to rated for at least 0.36 amps.  You will ideally want a separate SSR and outlet for every heater for the most accurate control.  However, it is possible to have multiple heaters powered from a single SSR as long as the SSR is rated to handle the combined current.  I happened to have a few spare 40A SSR's from <a href="http://www.auberins.com/index.php?main_page=index&cPath=2_30">Auber Instruments</a> leftover from another project that I used in my build.  For this project, any SSR rated for an output of at least 110VAC and 1A and an input of voltage of 3VDC will work.  An alternative to individual SSR's might be to use something like the <a href="http://www.amazon.com/gp/product/B0057OC5O8/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B0057OC5O8&linkCode=as2&tag=homereso01-20">SainSmart 4-Channel 5V Relay Module</a> instead.  This option would require a bit more work to successfully wire up, though.
+</p>
+
+<p>
+The temperature sensors are commonly referred to by the part name DS18B20.  These small sensors look similar to simple transistors with three wires coming out of them and use the Dallas 1-wire network protocol to communicate.  They can be bought individually for around $4 each. However it may be a better deal to pick up a <a href="http://www.amazon.com/gp/product/B007STHA22/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B007STHA22&linkCode=as2&tag=homereso01-20">10 pack</a> instead.
+</p>
